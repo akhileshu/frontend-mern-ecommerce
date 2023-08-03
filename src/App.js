@@ -15,6 +15,12 @@ import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import ProductDetailPage from './pages/ProductDetailPage';
 import Protected from './features/auth/components/Protected';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { selectLoggedInUser } from './features/auth/authSlice';
+import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
+
+// Create the router configuration for different routes.
 const router = createBrowserRouter([
   {
     path: '/',
@@ -59,8 +65,22 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  // Get the logged-in user from the Redux store.
+  const user = useSelector(selectLoggedInUser);
+
+  // Get the dispatch function from Redux.
+  const dispatch = useDispatch();
+
+  // Use useEffect to fetch cart items if the user is logged in.
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchItemsByUserIdAsync(user.id));
+    }
+  }, [dispatch, user]);
+
   return (
     <div className="App">
+      {/* Provide the router configuration to the app */}
       <RouterProvider router={router} />
     </div>
   );

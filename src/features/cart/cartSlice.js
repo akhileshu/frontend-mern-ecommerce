@@ -1,42 +1,95 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchCount } from './cartAPI';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart } from "./cartAPI";
 
 const initialState = {
-  value: 0,
-  status: 'idle',
+  items: [], // Array to store cart items
+  status: "idle", // Represents the async operation status ('idle', 'loading', 'succeeded', 'failed').
 };
 
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
+// Async Thunk for adding an item to the cart
+export const addToCartAsync = createAsyncThunk(
+  "cart/addToCart",
   async (amount) => {
-    const response = await fetchCount(amount);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+    const response = await addToCart(amount); // Calls the API to add an item to the cart.
+    return response.data; // Returns the data of the added item from the API response.
   }
 );
 
-export const counterSlice = createSlice({
-  name: 'counter',
+// Async Thunk for fetching cart items by user ID
+export const fetchItemsByUserIdAsync = createAsyncThunk(
+  "cart/fetchItemsByUserId",
+  async (userId) => {
+    const response = await fetchItemsByUserId(userId); // Calls the API to fetch cart items by user ID.
+    return response.data; // Returns the cart items from the API response.
+  }
+);
+
+// Async Thunk for updating an item in the cart
+export const updateCartAsync = createAsyncThunk(
+  "cart/updateCart",
+  async (update) => {
+    const response = await updateCart(update); // Calls the API to update an item in the cart.
+    return response.data; // Returns the updated item data from the API response.
+  }
+);
+
+// Async Thunk for deleting an item from the cart
+export const deleteItemFromCartAsync = createAsyncThunk(
+  "cart/deleteItemFromCart",
+  async (id) => {
+    const response = await deleteItemFromCart(id); // Calls the API to delete an item from the cart.
+    return id; // Returns the ID of the deleted item as it is not returned from the API response.
+  }
+);
+
+// Creates a Redux slice for cart state management
+export const cartSlice = createSlice({
+  name: "cart",
   initialState,
   reducers: {
     increment: (state) => {
+      // Example reducer that increments the value (not being used in this implementation).
       state.value += 1;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(incrementAsync.pending, (state) => {
-        state.status = 'loading';
+      .addCase(addToCartAsync.pending, (state) => {
+        state.status = "loading"; // Sets the status to 'loading' when adding an item to the cart.
       })
-      .addCase(incrementAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.value += action.payload;
+      .addCase(addToCartAsync.fulfilled, (state, action) => {
+        state.status = "idle"; // Sets the status back to 'idle' when adding an item to the cart is successful.
+        state.items.push(action.payload); // Adds the added item to the cart items list.
+      })
+      .addCase(fetchItemsByUserIdAsync.pending, (state) => {
+        state.status = "loading"; // Sets the status to 'loading' when fetching cart items.
+      })
+      .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
+        state.status = "idle"; // Sets the status back to 'idle' when fetching cart items is successful.
+        state.items = action.payload; // Updates the cart items with the fetched items from the API response.
+      })
+      .addCase(updateCartAsync.pending, (state) => {
+        state.status = "loading"; // Sets the status to 'loading' when updating an item in the cart.
+      })
+      .addCase(updateCartAsync.fulfilled, (state, action) => {
+        state.status = "idle"; // Sets the status back to 'idle' when updating an item in the cart is successful.
+        state.items = state.items.map((item) =>
+          item.id === action.payload.id ? action.payload : item
+        ); // Updates the cart items with the updated item from the API response.
+      })
+      .addCase(deleteItemFromCartAsync.pending, (state) => {
+        state.status = "loading"; // Sets the status to 'loading' when deleting an item from the cart.
+      })
+      .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
+        state.status = "idle"; // Sets the status back to 'idle' when deleting an item from the cart is successful.
+        state.items = state.items.filter((item) => item.id !== action.payload); // Removes the deleted item from the cart items list.
       });
   },
 });
 
-export const { increment } = counterSlice.actions;
+export const { increment } = cartSlice.actions;
 
-export const selectCount = (state) => state.counter.value;
+// Selector to access the cart items from the state
+export const selectItems = (state) => state.cart.items;
 
-export default counterSlice.reducer;
+export default cartSlice.reducer;

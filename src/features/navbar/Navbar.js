@@ -8,6 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, selectLoggedInUser } from "../auth/authSlice";
+import { selectItems } from "../cart/cartSlice";
 
 const user = {
   name: "Tom Cook",
@@ -28,6 +29,7 @@ function classNames(...classes) {
 
 function NavBar({ children }) {
   const dispatch = useDispatch();
+  const items=useSelector(selectItems)
   const loggedInUser = useSelector(selectLoggedInUser);
   const navigation = [
     { name: "Dashboard", href: "#", current: true },
@@ -39,7 +41,7 @@ function NavBar({ children }) {
     },
   ];
   console.log({ loggedInUser });
-  const items = [];
+
  
   return (
     <>
@@ -91,6 +93,7 @@ function NavBar({ children }) {
                             className="h-6 w-6"
                             aria-hidden="true"
                           />
+                          
                         </button>
                       </Link>
                       {items.length > 0 && (
