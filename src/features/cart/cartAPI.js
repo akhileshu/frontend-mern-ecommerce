@@ -38,3 +38,12 @@ export async function updateCart(update) {
 export async function deleteItemFromCart(id) {
   return await axios.delete(`${url}cart/${id}`); // Returns a response object
 }
+export async function resetCart(userId) {
+  // get all items of user's cart - and then delete each
+  const response = await fetchItemsByUserId(userId);
+  const allItemsInCart = response.data;
+  for (const item of allItemsInCart) {
+    deleteItemFromCart(item.id);
+  }
+  return { status: "success" };
+}

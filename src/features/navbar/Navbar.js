@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout, selectLoggedInUser } from "../auth/authSlice";
+import { selectLoggedInUser } from "../auth/authSlice";
 import { selectItems } from "../cart/cartSlice";
 
 const user = {
@@ -18,9 +18,9 @@ const user = {
 };
 
 const userNavigation = [
-  { name: "Your Profile", link: "/" },
-  { name: "Settings", link: "/" },
-  { name: "Sign out", link: "/login" },
+  { name: "Your Profile", link: "/profile" },
+  { name: "Your Orders", link: "/orders" },
+  { name: "Sign out", link: "/logout" },
 ];
 
 function classNames(...classes) {
@@ -128,7 +128,7 @@ function NavBar({ children }) {
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <Link
-                                    onClick={() => dispatch(logout())}
+                                    
                                     to={item.link}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",

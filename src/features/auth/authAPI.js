@@ -25,7 +25,7 @@ export async function checkUser(loginInfo) {
       params: { email },
     });
     const data = response.data;
-    console.log({ data });
+    // console.log({ data });
 
     if (data.length) {
       if (password === data[0].password) {
@@ -41,4 +41,7 @@ export async function checkUser(loginInfo) {
     console.error(error);
     throw error; // Throws the error to be handled by the caller
   }
+}
+export async function signOut(userId) {
+  return { data: "success" };
 }

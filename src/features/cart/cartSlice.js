@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart } from "./cartAPI";
+import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart,resetCart} from "./cartAPI";
 
 const initialState = {
   items: [], // Array to store cart items
@@ -39,6 +39,13 @@ export const deleteItemFromCartAsync = createAsyncThunk(
   async (id) => {
     const response = await deleteItemFromCart(id); // Calls the API to delete an item from the cart.
     return id; // Returns the ID of the deleted item as it is not returned from the API response.
+  }
+);
+export const resetCartAsync = createAsyncThunk(
+  "cart/resetCart",
+  async (userId) => {
+    const response = await resetCart(userId); // Calls the API to delete an item from the cart.
+    return response.status; // Returns the ID of the deleted item as it is not returned from the API response.
   }
 );
 
@@ -83,7 +90,14 @@ export const cartSlice = createSlice({
       .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
         state.status = "idle"; // Sets the status back to 'idle' when deleting an item from the cart is successful.
         state.items = state.items.filter((item) => item.id !== action.payload); // Removes the deleted item from the cart items list.
-      });
+      })
+      .addCase(resetCartAsync.pending, (state) => {
+        state.status = "loading"; // Sets the status to 'loading' when deleting an item from the cart.
+      })
+      .addCase(resetCartAsync.fulfilled, (state, action) => {
+        state.status = "idle"; // Sets the status back to 'idle' when deleting an item from the cart is successful.
+        state.items = []
+      })
   },
 });
 
