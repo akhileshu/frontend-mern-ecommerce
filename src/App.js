@@ -1,36 +1,44 @@
-import { Counter } from './features/counter/Counter';
-import './App.css';
-import Home from './pages/Home';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import PageNotFound from './pages/404';
+import { Counter } from "./features/counter/Counter";
+import "./App.css";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import PageNotFound from "./pages/404";
 
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
   Link,
-} from 'react-router-dom';
-import Cart from './features/cart/Cart';
-import CartPage from './pages/CartPage';
-import Checkout from './pages/Checkout';
-import ProductDetailPage from './pages/ProductDetailPage';
-import Protected from './features/auth/components/Protected';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { selectLoggedInUser } from './features/auth/authSlice';
-import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
-import OrderSuccessPage from './pages/OrderSuccessPage';
-import UserOrdersPage from './pages/UserOrdersPage';
-import { fetchLoggedInUserAsync, fetchLoggedInUserOrdersAsync } from './features/user/userSlice';
-import UserProfilePage from './pages/userProfilePage';
-import Logout from './features/auth/components/Logout';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
+} from "react-router-dom";
+import Cart from "./features/cart/Cart";
+import CartPage from "./pages/CartPage";
+import Checkout from "./pages/Checkout";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import Protected from "./features/auth/components/Protected";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { selectLoggedInUser } from "./features/auth/authSlice";
+import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
+import OrderSuccessPage from "./pages/OrderSuccessPage";
+import UserOrdersPage from "./pages/UserOrdersPage";
+import {
+  fetchLoggedInUserAsync,
+  fetchLoggedInUserOrdersAsync,
+} from "./features/user/userSlice";
+import UserProfilePage from "./pages/userProfilePage";
+import Logout from "./features/auth/components/Logout";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
+import AdminProductFormPage from "./pages/AdminProductFormPage";
+import AdminProductDetailPage from "./pages/AdminProductDetailPage";
+import AdminHome from "./pages/AdminHome";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
 
 // Create the router configuration for different routes.
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: (
       <Protected>
         <Home></Home>
@@ -38,15 +46,23 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/login',
+    path: "/admin",
+    element: (
+      <ProtectedAdmin>
+        <AdminHome></AdminHome>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/login",
     element: <LoginPage></LoginPage>,
   },
   {
-    path: '/signup',
+    path: "/signup",
     element: <SignupPage></SignupPage>,
   },
   {
-    path: '/cart',
+    path: "/cart",
     element: (
       <Protected>
         <CartPage></CartPage>
@@ -54,7 +70,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/checkout',
+    path: "/checkout",
     element: (
       <Protected>
         <Checkout></Checkout>
@@ -62,7 +78,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/product-detail/:id',
+    path: "/product-detail/:id",
     element: (
       <Protected>
         <ProductDetailPage></ProductDetailPage>
@@ -70,43 +86,68 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/order-success/:id',//using useParams of react-r-dom
+    path: "/admin/product-detail/:id",
     element: (
-      <OrderSuccessPage></OrderSuccessPage>
+      <ProtectedAdmin>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </ProtectedAdmin>
     ),
   },
   {
-    path: '/orders',
+    path: "/admin/product-form",
     element: (
-      <UserOrdersPage></UserOrdersPage>
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
     ),
   },
   {
-    path: '/profile',
+    path: "/admin/product-form/edit/:id",
     element: (
-      <UserProfilePage></UserProfilePage>
+      // though we made a different page for admin but still using same as of user 
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
     ),
   },
   {
-    path: '/logout',
+    path: '/admin/orders',
+    element: (
+      <ProtectedAdmin>
+        <AdminOrdersPage></AdminOrdersPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/order-success/:id", //using useParams of react-r-dom
+    element: <OrderSuccessPage></OrderSuccessPage>,
+  },
+  {
+    path: "/orders",
+    element: <UserOrdersPage></UserOrdersPage>,
+  },
+  {
+    path: "/profile",
+    element: <UserProfilePage></UserProfilePage>,
+  },
+  {
+    path: "/logout",
     element: <Logout></Logout>,
   },
   {
-    path: '/forgot-password',
+    path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
-    path: '*',
-    element: (
-      <PageNotFound></PageNotFound>
-    ),
+    path: "*",
+    element: <PageNotFound></PageNotFound>,
   },
 ]);
 
 function App() {
   // Get the logged-in user from the Redux store.
   const user = useSelector(selectLoggedInUser);
-  console.log(user)
+  console.log(user);
 
   // Get the dispatch function from Redux.
   const dispatch = useDispatch();
@@ -114,10 +155,8 @@ function App() {
   // Use useEffect to fetch cart items if the user is logged in.
   useEffect(() => {
     if (user) {
-      
       dispatch(fetchItemsByUserIdAsync(user.id));
-      dispatch(fetchLoggedInUserAsync(user.id))
-      
+      dispatch(fetchLoggedInUserAsync(user.id));
     }
   }, [dispatch, user]);
 

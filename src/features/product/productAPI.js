@@ -18,7 +18,11 @@ export async function fetchAllProducts() {
  * @returns {Promise} A promise that resolves to an object with products and totalItems count.
  */
 export async function fetchProductsByFilters(filter, sort, pagination) {
-  // TODO: On the server, we will support multi-values for filtering.
+  // filter = {"category":["smartphone","laptops"]}
+  // sort = {_sort:"price",_order="desc"}
+  // pagination = {_page:1,_limit=10}
+  // TODO : on server we will support multi values in filter
+  // TODO : Server will filter deleted products in case of non-admin
   let queryString = "";
 
   // Construct the query string for filters.
@@ -44,14 +48,14 @@ export async function fetchProductsByFilters(filter, sort, pagination) {
   const response = await axios.get(`${url}products?${queryString}`);
 
   // Extract the totalItems count from the response headers.
-  const totalItems = await response.headers.get('X-Total-Count');
+  const totalItems = await response.headers.get("X-Total-Count");
 
   // Return an object containing products and totalItems count.
   return {
     data: {
       products: response.data,
-      totalItems: +totalItems // Convert totalItems to a number.
-    }
+      totalItems: +totalItems, // Convert totalItems to a number.
+    },
   };
 }
 
@@ -78,4 +82,10 @@ export async function fetchCategories() {
  */
 export async function fetchBrands() {
   return await axios.get(`${url}brands`); // Returns the response object containing the brands.
+}
+export async function createProduct(product) {
+  return await axios.post(`${url}products`, product); // Returns the response object containing the brands.
+}
+export async function updateProduct(update) {
+  return await axios.patch(`${url}products/${update.id}`, update); // Returns a response object
 }
