@@ -67,7 +67,7 @@ export default function AdminProductDetail() {
               className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
             >
               {product.breadcrumbs &&
-                product.breadcrumbs.map((breadcrumb) => (
+                product.breadcrumbs((breadcrumb) => (
                   <li key={breadcrumb.id}>
                     <div className="flex items-center">
                       <a

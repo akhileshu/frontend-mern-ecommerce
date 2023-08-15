@@ -9,8 +9,8 @@ import {
   updateProductAsync,
 } from "../../product/productSlice";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ProductForm() {
   const {
@@ -20,10 +20,13 @@ function ProductForm() {
     reset,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate(); //to navigate back after form submit
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const dispatch = useDispatch();
   const params = useParams();
+  // const [flag, setFlag] = useState(false); //for restoring or deleting
+
   // selectedproduct gives gives a product after dispatch(fetchProductByIdAsync(params.id)); is called
   const selectedProduct = useSelector(selectProductById);
 
@@ -51,11 +54,15 @@ function ProductForm() {
     }
   }, [selectedProduct, params.id, setValue]);
 
-  const handleDelete = () =>{
-    const product = {...selectedProduct};
-    product.deleted = true;
+ 
+  const handleRestoreDelete = () => {
+    const product = { ...selectedProduct };
+    product.deleted = !selectedProduct.deleted;
     dispatch(updateProductAsync(product));
-  }
+    navigate("/admin")
+  };
+
+ 
 
   return (
     <form
@@ -76,7 +83,9 @@ function ProductForm() {
         product.price = +product.price;
         product.stock = +product.stock;
         product.discountPercentage = +product.discountPercentage;
-        console.log(product);
+
+
+        console.log("hi");
 
         if (params.id) {
           // edit
@@ -88,8 +97,11 @@ function ProductForm() {
           // create
           dispatch(createProductAsync(product));
           reset();
+
           //TODO:  on product successfully added clear fields and show a message
         }
+        // After dispatching the action, navigate back to the desired page
+        navigate("/admin");
       })}
     >
       <div className="space-y-12 bg-white p-12">
@@ -157,8 +169,8 @@ function ProductForm() {
                   })}
                 >
                   <option value="">--choose brand--</option>
-                  {brands.map((brand) => (
-                    <option value={brand.value}>{brand.label}</option>
+                  {brands.map((brand,index) => (
+                    <option key={index} value={brand.value}>{brand.label}</option>
                   ))}
                 </select>
               </div>
@@ -178,8 +190,8 @@ function ProductForm() {
                   })}
                 >
                   <option value="">--choose category--</option>
-                  {categories.map((category) => (
-                    <option value={category.value}>{category.label}</option>
+                  {categories.map((category,index) => (
+                    <option key={index} value={category.value}>{category.label}</option>
                   ))}
                 </select>
               </div>
@@ -421,18 +433,29 @@ function ProductForm() {
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
+          onClick={() => navigate("/admin")}
           type="button"
           className="text-sm font-semibold leading-6 text-gray-900"
         >
           Cancel
         </button>
 
-        {selectedProduct && <button
-          onClick={handleDelete}
-          className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        {selectedProduct &&  (
+          <button
+          type="button"
+          onClick={handleRestoreDelete}
+          className={`rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${
+            selectedProduct.deleted
+              ? "bg-green-600 hover:bg-green-500 focus:bg-green-600"
+              : "bg-red-600 hover:bg-red-500 focus:bg-red-600"
+          } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
         >
-          Delete
-        </button>}
+          {selectedProduct.deleted ? "Restore" : "Delete"}
+        </button>
+        
+        )}
+        
+       
 
         <button
           type="submit"

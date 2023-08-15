@@ -3,6 +3,7 @@ import { checkUser, createUser, signOut, updateUser } from "./authAPI";
 
 const initialState = {
   loggedInUser: null, // Represents the currently logged-in user, initially set to null.
+  //  id/email/role
   status: "idle", // Represents the async operation status ('idle', 'loading', 'succeeded', 'failed').
   error: null, // Stores any error that occurs during async operations.
 };
@@ -19,9 +20,14 @@ export const createUserAsync = createAsyncThunk(
 // Async Thunk for checking user credentials
 export const checkUserAsync = createAsyncThunk(
   "user/checkUser",
-  async (loginInfo) => {
-    const response = await checkUser(loginInfo); // Calls the API to check user credentials.
-    return response.data; // Returns the user data from the API response.
+  async (loginInfo, { rejectWithValue }) => {
+    try {
+      const response = await checkUser(loginInfo); // Calls the API to check user credentials.
+      return response.data; // Returns the user data from the API response.
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);//capture the specific error response from the server and store it in the Redux state.
+    }
   }
 );
 export const signOutAsync = createAsyncThunk(
@@ -63,7 +69,7 @@ export const counterSlice = createSlice({
       })
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = "idle"; // Sets the status back to 'idle' when the user credentials check is rejected.
-        state.error = action.error; // Updates the error state with the error information from the rejected action.
+        state.error = action.payload; // Updates the error state with the error information from the rejected action.
       })
       .addCase(signOutAsync.pending, (state) => {
         state.status = "loading"; // Sets the status to 'loading' when checking user credentials.

@@ -19,20 +19,21 @@ const initialState = {
 };
 
 // Async Thunk for fetching all products.
-export const fetchAllProductsAsync = createAsyncThunk(
-  "product/fetchAllProducts",
-  async () => {
-    const response = await fetchAllProducts();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data; // Returns an array containing all products.
-  }
-);
+// no more in use
+// export const fetchAllProductsAsync = createAsyncThunk(
+//   "product/fetchAllProducts",
+//   async () => {
+//     const response = await fetchAllProducts();
+//     // The value we return becomes the `fulfilled` action payload
+//     return response.data; // Returns an array containing all products.
+//   }
+// );
 
 // Async Thunk for fetching products based on filters.
 export const fetchProductsByFiltersAsync = createAsyncThunk(
   "product/fetchProductsByFilters",
-  async ({ filter, sort, pagination }) => {
-    const response = await fetchProductsByFilters(filter, sort, pagination);
+  async ({ filter, sort, pagination ,admin}) => {
+    const response = await fetchProductsByFilters(filter, sort, pagination,admin);
     return response.data; // Returns an object containing products and totalItems count.
   }
 );
@@ -89,13 +90,13 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllProductsAsync.pending, (state) => {
-        state.status = "loading"; // Sets the status to 'loading' when fetching all products.
-      })
-      .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-        state.status = "idle"; // Sets the status back to 'idle' when fetching all products is successful.
-        state.products = action.payload; // Updates the products array with the fetched products.
-      })
+      // .addCase(fetchAllProductsAsync.pending, (state) => {
+      //   state.status = "loading"; // Sets the status to 'loading' when fetching all products.
+      // })
+      // .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
+      //   state.status = "idle"; // Sets the status back to 'idle' when fetching all products is successful.
+      //   state.products = action.payload; // Updates the products array with the fetched products.
+      // })
       .addCase(fetchProductsByFiltersAsync.pending, (state) => {
         state.status = "loading"; // Sets the status to 'loading' when fetching products based on filters.
       })

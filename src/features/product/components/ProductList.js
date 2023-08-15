@@ -432,7 +432,7 @@ function ProductGrid({ products }) {
                     </p>
                   </div>
                 </div>
-                {product.deleted && (
+                {product.deleted==="true" && (
                   <div>
                     <p className="text-sm text-red-400">product deleted</p>
                   </div>

@@ -1,6 +1,8 @@
 import axios from "axios";
 const url = "http://localhost:8080/";
 
+// item->{quantity:n,product:{},user:{}}
+
 /**
  * Adds an item to the cart by making a POST request to the server.
  * @param {Object} item - The item to be added to the cart.
@@ -16,6 +18,8 @@ export async function addToCart(item) {
  * @returns {Promise} A promise that resolves to the response object from the server containing the cart items.
  */
 export async function fetchItemsByUserId(userId) {
+    // url ->http://localhost:8080/cart/?user=64da3ccd004bf8af265c3811
+
   return await axios.get(`${url}cart`, {
     params: { user: userId },
   });
@@ -27,6 +31,7 @@ export async function fetchItemsByUserId(userId) {
  * @returns {Promise} A promise that resolves to the response object from the server.
  */
 export async function updateCart(update) {
+  // update->{id,quantity}
   return await axios.patch(`${url}cart/${update.id}`, update); // Returns a response object
 }
 

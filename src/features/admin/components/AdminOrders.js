@@ -116,8 +116,8 @@ function AdminOrders() {
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
-                {orders && orders.map((order) => (
-                  <tr className="border-b border-gray-200 hover:bg-gray-100">
+                {orders && orders.map((order,index) => (
+                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="mr-2"></div>
@@ -125,17 +125,17 @@ function AdminOrders() {
                       </div>
                     </td>
                     <td className="py-3 px-6 text-left">
-                      {order.items.map((item) => (
-                        <div className="flex items-center">
+                      {order.items.map((item,index) => (
+                        <div key={index} className="flex items-center">
                           <div className="mr-2">
                             <img
                               className="w-6 h-6 rounded-full"
-                              src={item.thumbnail}
+                              src={item.product.thumbnail}
                             />
                           </div>
                           <span>
-                            {item.title} - #{item.quantity} - $
-                            {discountedPrice(item)}
+                            {item.product.title} - #{item.quantity} - $
+                            {discountedPrice(item.product)}
                           </span>
                         </div>
                       ))}
@@ -159,7 +159,7 @@ function AdminOrders() {
                     </td>
                     <td className="py-3 px-6 text-center">
                       {order.id === editableOrderId ? (
-                        <select onChange={(e) => handleUpdate(e, order)}>
+                        <select value={order.status} onChange={(e) => handleUpdate(e, order)}>
                           <option value="pending">Pending</option>
                           <option value="dispatched">Dispatched</option>
                           <option value="delivered">Delivered</option>

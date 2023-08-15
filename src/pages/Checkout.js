@@ -25,14 +25,15 @@ function Checkout() {
     formState: { errors },
   } = useForm();
 
-  const user = useSelector(selectUserInfo);
+  const userInfo = useSelector(selectUserInfo);
   // console.log({user})
 
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
   // console.log({user,items})
+  // item->{quantity:n,product:{},user:{}}
   const totalAmount = items.reduce(
-    (amount, item) => discountedPrice(item) * item.quantity + amount,
+    (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -41,7 +42,8 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const handleQuantity = (e, item) => {
-    dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+    // its like a patch need only item id and quantitiy to update cart for a user
+    dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
   };
 
   const handleRemove = (e, id) => {
@@ -51,7 +53,7 @@ function Checkout() {
   const handleAddress = (e) => {
     // console.log(e.target.value);
     const index = e.target.value;
-    setSelectedAddress(user.addresses[index]);
+    setSelectedAddress(userInfo.addresses[index]);
   };
 
   const handlePayment = (e) => {
@@ -67,7 +69,7 @@ function Checkout() {
         items,
         totalAmount,
         totalItems,
-        user,
+        user:userInfo.id,
         paymentMethod,
         selectedAddress,
         status: "pending",
@@ -102,8 +104,8 @@ function Checkout() {
                 console.log(data);
                 dispatch(
                   updateUserAsync({
-                    ...user,
-                    addresses: [...user.addresses, data],
+                    ...userInfo,
+                    addresses: [...userInfo.addresses, data],
                   })
                 );
                 reset();
@@ -318,8 +320,8 @@ function Checkout() {
                     Choose from Existing addresses
                   </p>
                   <ul role="list">
-                    {user.addresses &&
-                      user.addresses.map((address, index) => (
+                    {userInfo.addresses &&
+                      userInfo.addresses.map((address, index) => (
                         <label
                           key={index}
                           className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
@@ -421,23 +423,29 @@ function Checkout() {
                     {items.map((item) => (
                       <li key={item.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                          <img
-                            src={item.thumbnail}
-                            alt={item.title}
-                            className="h-full w-full object-cover object-center"
-                          />
+                          <Link to={`/product-detail/${item.product.id}`}>
+                            <img
+                              src={item.product.thumbnail}
+                              alt={item.product.title}
+                              className="h-full w-full object-cover object-center"
+                            />
+                          </Link>
                         </div>
 
                         <div className="ml-4 flex flex-1 flex-col">
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.href}>{item.title}</a>
+                                <Link to={`/product-detail/${item.product.id}`}>
+                                  {item.product.title}
+                                </Link>
                               </h3>
-                              <p className="ml-4">${discountedPrice(item)}</p>
+                              <p className="ml-4">
+                                ${discountedPrice(item.product)}
+                              </p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
-                              {item.brand}
+                              {item.product.brand}
                             </p>
                           </div>
                           <div className="flex flex-1 items-end justify-between text-sm">
@@ -499,7 +507,7 @@ function Checkout() {
                 </div>
                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                   <p>
-                    or
+                    or{" "}
                     <Link to="/">
                       <button
                         type="button"

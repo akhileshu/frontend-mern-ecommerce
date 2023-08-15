@@ -5,10 +5,10 @@ const url = "http://localhost:8080/";
  * Fetches all products from the server.
  * @returns {Promise} A promise that resolves to the response object containing the products.
  */
-export async function fetchAllProducts() {
-  // TODO: We will not hard-code the server URL here.
-  return await axios.get(`${url}products`); // Returns the response object containing the products.
-}
+// export async function fetchAllProducts() {
+//   // TODO: We will not hard-code the server URL here.
+//   return await axios.get(`${url}products`); // Returns the response object containing the products.
+// }
 
 /**
  * Fetches products from the server based on filters, sorting, and pagination.
@@ -17,14 +17,13 @@ export async function fetchAllProducts() {
  * @param {Object} pagination - The pagination object containing page and item per page options.
  * @returns {Promise} A promise that resolves to an object with products and totalItems count.
  */
-export async function fetchProductsByFilters(filter, sort, pagination) {
+export async function fetchProductsByFilters(filter, sort, pagination, admin) {
   // filter = {"category":["smartphone","laptops"]}
   // sort = {_sort:"price",_order="desc"}
   // pagination = {_page:1,_limit=10}
   // TODO : on server we will support multi values in filter
   // TODO : Server will filter deleted products in case of non-admin
   let queryString = "";
-
   // Construct the query string for filters.
   for (let key in filter) {
     const categoryValues = filter[key];
@@ -43,6 +42,10 @@ export async function fetchProductsByFilters(filter, sort, pagination) {
   for (let key in pagination) {
     queryString += `${key}=${pagination[key]}&`;
   }
+  if (admin) {
+    queryString += `admin=true`;
+  }
+  // url->http://localhost:8080/products?_page=1&_limit=10&admin=true
 
   // Fetch the products with the constructed query string.
   const response = await axios.get(`${url}products?${queryString}`);
