@@ -14,6 +14,8 @@ function OrderSuccessPage() {
     // reset cart
     dispatch(resetCartAsync(user.id))
     // reset currentOrder
+    // purpose -> currentOrder contains details of order so that we can show the order id to user on orderSuccessPage
+    // to={`/order-success/${currentOrder.id}`}
     dispatch(resetOrder())
    },[dispatch,user])
    

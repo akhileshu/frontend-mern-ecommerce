@@ -25,7 +25,7 @@ export const checkUserAsync = createAsyncThunk(
       const response = await checkUser(loginInfo); // Calls the API to check user credentials.
       return response.data; // Returns the user data from the API response.
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return rejectWithValue(error);//capture the specific error response from the server and store it in the Redux state.
     }
   }
@@ -38,13 +38,7 @@ export const signOutAsync = createAsyncThunk(
     return response.data;
   }
 );
-// export const updateUserAsync = createAsyncThunk(
-//   'user/updateUser',
-//   async (update) => {
-//     const response = await updateUser(update); // Calls the API to create a new user.
-//     return response.data; // Returns the user data from the API response.
-//   }
-// );
+
 
 // Creates a Redux slice for user state management
 export const counterSlice = createSlice({
@@ -78,13 +72,7 @@ export const counterSlice = createSlice({
         state.status = "idle"; // Sets the status back to 'idle' when the user credentials are correct.
         state.loggedInUser = null; // Updates the logged-in user with the user data from the API response.
       });
-    // .addCase(updateUserAsync.pending, (state) => {
-    //   state.status = 'loading'; // Sets the status to 'loading' when checking user credentials.
-    // })
-    // .addCase(updateUserAsync.fulfilled, (state, action) => {
-    //   state.status = 'idle'; // Sets the status back to 'idle' when the user credentials are correct.
-    //   state.loggedInUser = action.payload; // Updates the logged-in user with the user data from the API response.
-    // })
+   
   },
 });
 

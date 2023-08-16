@@ -147,7 +147,7 @@ const router = createBrowserRouter([
 function App() {
   // Get the logged-in user from the Redux store.
   const user = useSelector(selectLoggedInUser);
-  console.log(user);
+  // console.log(user);
 
   // Get the dispatch function from Redux.
   const dispatch = useDispatch();

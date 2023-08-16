@@ -54,15 +54,12 @@ function ProductForm() {
     }
   }, [selectedProduct, params.id, setValue]);
 
- 
   const handleRestoreDelete = () => {
     const product = { ...selectedProduct };
     product.deleted = !selectedProduct.deleted;
     dispatch(updateProductAsync(product));
-    navigate("/admin")
+    navigate("/admin");
   };
-
- 
 
   return (
     <form
@@ -83,9 +80,6 @@ function ProductForm() {
         product.price = +product.price;
         product.stock = +product.stock;
         product.discountPercentage = +product.discountPercentage;
-
-
-        console.log("hi");
 
         if (params.id) {
           // edit
@@ -169,8 +163,10 @@ function ProductForm() {
                   })}
                 >
                   <option value="">--choose brand--</option>
-                  {brands.map((brand,index) => (
-                    <option key={index} value={brand.value}>{brand.label}</option>
+                  {brands.map((brand, index) => (
+                    <option key={index} value={brand.value}>
+                      {brand.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -190,8 +186,10 @@ function ProductForm() {
                   })}
                 >
                   <option value="">--choose category--</option>
-                  {categories.map((category,index) => (
-                    <option key={index} value={category.value}>{category.label}</option>
+                  {categories.map((category, index) => (
+                    <option key={index} value={category.value}>
+                      {category.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -440,22 +438,19 @@ function ProductForm() {
           Cancel
         </button>
 
-        {selectedProduct &&  (
+        {selectedProduct && (
           <button
-          type="button"
-          onClick={handleRestoreDelete}
-          className={`rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${
-            selectedProduct.deleted
-              ? "bg-green-600 hover:bg-green-500 focus:bg-green-600"
-              : "bg-red-600 hover:bg-red-500 focus:bg-red-600"
-          } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-        >
-          {selectedProduct.deleted ? "Restore" : "Delete"}
-        </button>
-        
+            type="button"
+            onClick={handleRestoreDelete}
+            className={`rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${
+              selectedProduct.deleted
+                ? "bg-green-600 hover:bg-green-500 focus:bg-green-600"
+                : "bg-red-600 hover:bg-red-500 focus:bg-red-600"
+            } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+          >
+            {selectedProduct.deleted ? "Restore" : "Delete"}
+          </button>
         )}
-        
-       
 
         <button
           type="submit"

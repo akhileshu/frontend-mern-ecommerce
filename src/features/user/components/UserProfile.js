@@ -12,10 +12,22 @@ export default function UserProfile() {
   const userInfo = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
-  /*addresses:(2) [{…}, {…}]
-  email:"demo@gmail.com"
-  id:7
-  password:"Tx_ic#vKrLkSKx5"*/
+  /*
+{
+  "_id": {
+    "$oid": "64da3ccd004bf8af265c3811"
+  },
+  "email": "viru@gmail.com",
+  "password": "Pass@123",
+  "role": "user",
+  "addresses": [
+    {},{},..
+  ],
+  "orders": [
+    {},{},..
+  ],,
+}
+*/
 
   function handleRemove(e, index) {
     const updatedUser = { ...userInfo, addresses: [...userInfo.addresses] }; //for shallow copy issue
@@ -41,7 +53,10 @@ export default function UserProfile() {
     setSelectedEditIndex(-1);
   }
   function handleAdd(newAddress) {
-    const updatedUser = { ...userInfo, addresses: [...userInfo.addresses, newAddress] }; //for shallow copy issue
+    const updatedUser = {
+      ...userInfo,
+      addresses: [...userInfo.addresses, newAddress],
+    }; //for shallow copy issue
     dispatch(updateUserAsync(updatedUser));
     setShowAddAddressForm(false);
   }
@@ -63,7 +78,7 @@ export default function UserProfile() {
           <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
             email address : {userInfo.email}
           </h3>
-          {userInfo.role === 'admin' && (
+          {userInfo.role === "admin" && (
             <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
               role : {userInfo.role}
             </h3>
@@ -86,7 +101,7 @@ export default function UserProfile() {
               className="bg-white px-5 py-12 mt-12"
               noValidate
               onSubmit={handleSubmit((data) => {
-                console.log(data);
+                // console.log(data);
                 handleAdd(data);
                 reset();
               })}
@@ -292,7 +307,7 @@ export default function UserProfile() {
                   className="bg-white px-5 py-12 mt-12"
                   noValidate
                   onSubmit={handleSubmit((data) => {
-                    console.log(data);
+                    // console.log(data);
                     handleEdit(data, index);
                     reset();
                   })}

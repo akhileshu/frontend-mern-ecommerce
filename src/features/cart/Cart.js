@@ -13,33 +13,18 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
 
-// const items = [
-//   {
-//     id: 1,
-//     title: "Throwback Hip Bag",
-//     href: "#",
-//     color: "Salmon",
-//     price: "$90.00",
-//     quantity: 1,
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-item-01.jpg",
-//     imageAlt:
-//       "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
+// {
+//   "_id":"$oid": "64dc15f525a0190cce12d725"
+//   "quantity": 1,
+//   "product": {
+  // we are just storing product id but can retreive whole product object because we are using ref in schema
+//     "$oid": "64da0304a2a9c3c3e88264a3"
 //   },
-//   {
-//     id: 2,
-//     name: "Medium Stuff Satchel",
-//     href: "#",
-//     color: "Blue",
-//     price: "$32.00",
-//     quantity: 1,
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-item-02.jpg",
-//     imageAlt:
-//       "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
+//   "user": {
+   // we are just storing product id but can retreive whole user object because we are using ref in schema
+//     "$oid": "64db6ce4a0ca5ae76fb3fc4a"
 //   },
-//   // More items...
-// ];
+// }
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -49,20 +34,17 @@ export default function Cart() {
     (acc, item) => acc + discountedPrice(item.product) * item.quantity,
     0
   );
-  const totalItems = items.reduce(
-    (acc, item) => acc + item.quantity,
-    0
-  );
-  const handleQuantity=(e,item)=>{
-    dispatch(updateCartAsync({id:item.id,quantity:+e.target.value}))
-  }
-  const handleRemove=(item)=>{
-    dispatch(deleteItemFromCartAsync(item.id))
-  }
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+  const handleQuantity = (e, item) => {
+    dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
+  };
+  const handleRemove = (item) => {
+    dispatch(deleteItemFromCartAsync(item.id));
+  };
 
   return (
     <>
-          {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {!items.length && <Navigate to="/" replace={true}></Navigate>}
 
       <div>
         <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -75,22 +57,26 @@ export default function Cart() {
                 {items.map((item) => (
                   <li key={item.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                    <Link to={`/product-detail/${item.product.id}`}>
-                            <img
-                              src={item.product.thumbnail}
-                              alt={item.product.title}
-                              className="h-full w-full object-cover object-center"
-                            />
-                          </Link>
+                      <Link to={`/product-detail/${item.product.id}`}>
+                        <img
+                          src={item.product.thumbnail}
+                          alt={item.product.title}
+                          className="h-full w-full object-cover object-center"
+                        />
+                      </Link>
                     </div>
 
                     <div className="ml-4 flex flex-1 flex-col">
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                          <Link to={`/product-detail/${item.product.id}`}>{item.product.title}</Link>
+                            <Link to={`/product-detail/${item.product.id}`}>
+                              {item.product.title}
+                            </Link>
                           </h3>
-                          <p className="ml-4">{discountedPrice(item.product)}</p>
+                          <p className="ml-4">
+                            {discountedPrice(item.product)}
+                          </p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
                           {item.product.brand}
@@ -104,7 +90,10 @@ export default function Cart() {
                           >
                             Qty
                           </label>
-                          <select value={item.quantity} onChange={(e)=>handleQuantity(e,item)}>
+                          <select
+                            value={item.quantity}
+                            onChange={(e) => handleQuantity(e, item)}
+                          >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -115,7 +104,7 @@ export default function Cart() {
 
                         <div className="flex">
                           <button
-                          onClick={()=>handleRemove(item)}
+                            onClick={() => handleRemove(item)}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
@@ -152,7 +141,7 @@ export default function Cart() {
             </div>
             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
               <p>
-                or{' '}
+                or{" "}
                 <Link to="/">
                   <button
                     type="button"

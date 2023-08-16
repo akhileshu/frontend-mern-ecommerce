@@ -69,8 +69,6 @@ export const orderSlice = createSlice({
         state.orders = state.orders.map((order) =>
           order.id === action.payload.id ? action.payload : order
         );
-        // const index =  state.orders.findIndex(order=>order.id===action.payload.id)
-        // state.orders[index] = action.payload;
       });
   },
 });

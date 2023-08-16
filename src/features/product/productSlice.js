@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createProduct,
-  fetchAllProducts,
   fetchBrands,
   fetchCategories,
   fetchProductById,
@@ -18,16 +17,7 @@ const initialState = {
   selectedProduct: null, // The product object selected by ID.
 };
 
-// Async Thunk for fetching all products.
-// no more in use
-// export const fetchAllProductsAsync = createAsyncThunk(
-//   "product/fetchAllProducts",
-//   async () => {
-//     const response = await fetchAllProducts();
-//     // The value we return becomes the `fulfilled` action payload
-//     return response.data; // Returns an array containing all products.
-//   }
-// );
+
 
 // Async Thunk for fetching products based on filters.
 export const fetchProductsByFiltersAsync = createAsyncThunk(
@@ -90,13 +80,6 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // .addCase(fetchAllProductsAsync.pending, (state) => {
-      //   state.status = "loading"; // Sets the status to 'loading' when fetching all products.
-      // })
-      // .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-      //   state.status = "idle"; // Sets the status back to 'idle' when fetching all products is successful.
-      //   state.products = action.payload; // Updates the products array with the fetched products.
-      // })
       .addCase(fetchProductsByFiltersAsync.pending, (state) => {
         state.status = "loading"; // Sets the status to 'loading' when fetching products based on filters.
       })
