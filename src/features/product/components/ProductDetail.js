@@ -9,7 +9,6 @@ import {
 } from "../productSlice";
 import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
@@ -48,7 +47,6 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const product = useSelector(selectProductById); //individual product
   const items = useSelector(selectItems); //items in cart
-  const user = useSelector(selectLoggedInUser); //current user
   const status = useSelector(selectStatus);
   const dispatch = useDispatch();
   const params = useParams();
@@ -67,7 +65,7 @@ export default function ProductDetail() {
       const newItem = {
         product: product.id,
         quantity: 1,
-        user: user.id,
+        
       };
       dispatch(addToCartAsync(newItem));
       alert("added in cart");

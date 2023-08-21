@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchLoggedInUserOrdersAsync,
@@ -16,12 +16,13 @@ export default function UserOrders() {
   // console.log({user,orders})
   useEffect(() => {
     // console.log(userInfo.id)
-    dispatch(fetchLoggedInUserOrdersAsync(userInfo.id));
+    dispatch(fetchLoggedInUserOrdersAsync());
   }, [dispatch]);
 
   return (
     <div>
-      {orders.map((order,index) => (
+      {orders && 
+      orders.map((order,index) => (
         <div key={index}>
           <div>
             <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">

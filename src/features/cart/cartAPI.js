@@ -17,12 +17,10 @@ export async function addToCart(item) {
  * @param {string} userId - The ID of the user whose cart items are to be fetched.
  * @returns {Promise} A promise that resolves to the response object from the server containing the cart items.
  */
-export async function fetchItemsByUserId(userId) {
+export async function fetchItemsByUserId() {
     // url ->http://localhost:8080/cart/?user=64da3ccd004bf8af265c3811
 
-  return await axios.get(`${url}cart`, {
-    params: { user: userId },
-  });
+  return await axios.get(`${url}cart`);
 }
 
 /**
@@ -43,9 +41,9 @@ export async function updateCart(update) {
 export async function deleteItemFromCart(id) {
   return await axios.delete(`${url}cart/${id}`); // Returns a response object
 }
-export async function resetCart(userId) {
+export async function resetCart() {
   // get all items of user's cart - and then delete each
-  const response = await fetchItemsByUserId(userId);
+  const response = await fetchItemsByUserId();
   const allItemsInCart = response.data;
   for (const item of allItemsInCart) {
     deleteItemFromCart(item.id);

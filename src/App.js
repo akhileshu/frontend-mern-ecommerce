@@ -104,14 +104,14 @@ const router = createBrowserRouter([
   {
     path: "/admin/product-form/edit/:id",
     element: (
-      // though we made a different page for admin but still using same as of user 
+      // though we made a different page for admin but still using same as of user
       <ProtectedAdmin>
         <AdminProductFormPage></AdminProductFormPage>
       </ProtectedAdmin>
     ),
   },
   {
-    path: '/admin/orders',
+    path: "/admin/orders",
     element: (
       <ProtectedAdmin>
         <AdminOrdersPage></AdminOrdersPage>
@@ -145,18 +145,15 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  // Get the logged-in user from the Redux store.
   const user = useSelector(selectLoggedInUser);
-  // console.log(user);
-
-  // Get the dispatch function from Redux.
+  // now user contains only token and id can be retrived in backend through req.user
   const dispatch = useDispatch();
 
   // Use useEffect to fetch cart items if the user is logged in.
   useEffect(() => {
     if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id));
-      dispatch(fetchLoggedInUserAsync(user.id));
+      dispatch(fetchItemsByUserIdAsync());
+      dispatch(fetchLoggedInUserAsync());
     }
   }, [dispatch, user]);
 

@@ -12,7 +12,7 @@ function OrderSuccessPage() {
    
    useEffect(()=>{
     // reset cart
-    dispatch(resetCartAsync(user.id))
+    dispatch(resetCartAsync())
     // reset currentOrder
     // purpose -> currentOrder contains details of order so that we can show the order id to user on orderSuccessPage
     // to={`/order-success/${currentOrder.id}`}

@@ -9,8 +9,8 @@ import {
   updateProductAsync,
 } from "../../product/productSlice";
 import { useForm } from "react-hook-form";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 function ProductForm() {
   const {

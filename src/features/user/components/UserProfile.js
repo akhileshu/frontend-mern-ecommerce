@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchLoggedInUserAsync,
-  selectUserInfo,
-  updateUserAsync,
-} from "../userSlice";
+import { selectUserInfo, updateUserAsync } from "../userSlice";
 import { useForm } from "react-hook-form";
 
 export default function UserProfile() {

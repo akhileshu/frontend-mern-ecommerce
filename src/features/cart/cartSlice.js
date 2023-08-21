@@ -9,8 +9,8 @@ const initialState = {
 // Async Thunk for adding an item to the cart
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
-  async (amount) => {
-    const response = await addToCart(amount); // Calls the API to add an item to the cart.
+  async (itme) => {
+    const response = await addToCart(itme); // Calls the API to add an item to the cart.
     return response.data; // Returns the data of the added item from the API response.
   }
 );
@@ -18,8 +18,8 @@ export const addToCartAsync = createAsyncThunk(
 // Async Thunk for fetching cart items by user ID
 export const fetchItemsByUserIdAsync = createAsyncThunk(
   "cart/fetchItemsByUserId",
-  async (userId) => {
-    const response = await fetchItemsByUserId(userId); // Calls the API to fetch cart items by user ID.
+  async () => {
+    const response = await fetchItemsByUserId(); // Calls the API to fetch cart items by user ID.
     return response.data; // Returns the cart items from the API response.
   }
 );
@@ -43,8 +43,8 @@ export const deleteItemFromCartAsync = createAsyncThunk(
 );
 export const resetCartAsync = createAsyncThunk(
   "cart/resetCart",
-  async (userId) => {
-    const response = await resetCart(userId); // Calls the API to delete an item from the cart.
+  async () => {
+    const response = await resetCart(); // Calls the API to delete an item from the cart.
     return response.status; // Returns the ID of the deleted item as it is not returned from the API response.
   }
 );
