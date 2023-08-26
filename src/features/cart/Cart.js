@@ -4,6 +4,7 @@ import {
   deleteItemFromCartAsync,
   increment,
   incrementAsync,
+  selectCartLoaded,
   selectCount,
   selectItems,
   updateCartAsync,
@@ -17,19 +18,19 @@ import { discountedPrice } from "../../app/constants";
 //   "_id":"$oid": "64dc15f525a0190cce12d725"
 //   "quantity": 1,
 //   "product": {
-  // we are just storing product id but can retreive whole product object because we are using ref in schema
+// we are just storing product id but can retreive whole product object because we are using ref in schema
 //     "$oid": "64da0304a2a9c3c3e88264a3"
 //   },
 //   "user": {
-   // we are just storing product id but can retreive whole user object because we are using ref in schema
+// we are just storing product id but can retreive whole user object because we are using ref in schema
 //     "$oid": "64db6ce4a0ca5ae76fb3fc4a"
 //   },
 // }
 
 export default function Cart() {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
+  const cartLoaded = useSelector(selectCartLoaded);
   const totalPrice = items.reduce(
     (acc, item) => acc + discountedPrice(item.product) * item.quantity,
     0
@@ -44,7 +45,9 @@ export default function Cart() {
 
   return (
     <>
-      {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {!items.length && cartLoaded && (
+        <Navigate to="/" replace={true}></Navigate>
+      )}
 
       <div>
         <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">

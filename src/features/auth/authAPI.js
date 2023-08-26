@@ -30,9 +30,23 @@ export async function loginUser(loginInfo) {
       // dont know why but if credentials didnt match else block is not executing and catch -> error is executing
     }
   } catch (error) {
-    console.log({ error });
+    // console.log({ error });
     const errorMessage = error?.response?.data || "An error occurred during login.";
     throw new Error(errorMessage); // Store the error message string in the Redux state  }
+}
+}
+export async function checkAuth() {
+  try {
+    const response = await axios.get(`${url}/auth/check`);
+    if (response.status === 200) {
+      // Successfully authenticated
+      return response;
+    } else {
+      throw new Error(response.data);
+    }
+  } catch (error) {
+    throw new Error(error)
+    // TODO: on server it will only return some info of user (not password)
 }
 }
 

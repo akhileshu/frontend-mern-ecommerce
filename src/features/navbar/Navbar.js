@@ -157,7 +157,7 @@ function NavBar({ children }) {
                       item[userInfo.role] ? (
                         <Link key={index} to={item.link}>
                           <Disclosure.Button
-                            as="a"
+                            as="p"
                             href={item.href}
                             className={classNames(
                               item.current
@@ -212,7 +212,7 @@ function NavBar({ children }) {
                       {userNavigation.map((item, index) => (
                         <Link key={index} to={item.link}>
                           <Disclosure.Button
-                            as="a"
+                            as="p"//nesting of <a> tag gives error so use <p> tag
                             href={item.href}
                             className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                           >

@@ -4,6 +4,7 @@ import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart,resetCart
 const initialState = {
   items: [], // Array to store cart items
   status: "idle", // Represents the async operation status ('idle', 'loading', 'succeeded', 'failed').
+  cartLoaded:false,
 };
 
 // Async Thunk for adding an item to the cart
@@ -37,7 +38,7 @@ export const updateCartAsync = createAsyncThunk(
 export const deleteItemFromCartAsync = createAsyncThunk(
   "cart/deleteItemFromCart",
   async (id) => {
-    const response = await deleteItemFromCart(id); // Calls the API to delete an item from the cart.
+    await deleteItemFromCart(id); // Calls the API to delete an item from the cart.
     return id; // Returns the ID of the deleted item as it is not returned from the API response.
   }
 );
@@ -74,6 +75,11 @@ export const cartSlice = createSlice({
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
         state.status = "idle"; // Sets the status back to 'idle' when fetching cart items is successful.
         state.items = action.payload; // Updates the cart items with the fetched items from the API response.
+        state.cartLoaded=true
+      })
+      .addCase(fetchItemsByUserIdAsync.rejected, (state) => {
+        state.status="idle"
+        state.cartLoaded=true
       })
       .addCase(updateCartAsync.pending, (state) => {
         state.status = "loading"; // Sets the status to 'loading' when updating an item in the cart.
@@ -105,5 +111,6 @@ export const { increment } = cartSlice.actions;
 
 // Selector to access the cart items from the state
 export const selectItems = (state) => state.cart.items;
+export const selectCartLoaded = (state) => state.cart.cartLoaded;
 
 export default cartSlice.reducer;

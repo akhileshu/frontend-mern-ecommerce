@@ -10,7 +10,6 @@ import {
   selectTotalItems,
 } from '../productSlice';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -23,6 +22,7 @@ import {
   MinusIcon,
   PlusIcon,
   Squares2X2Icon,
+  XMarkIcon ,
 } from '@heroicons/react/20/solid';
 import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 import Pagination from '../../common/Pagination';
@@ -91,6 +91,10 @@ export default function ProductList() {
     // console.log({ page });
     setPage(page);
   };
+  const clearFilter=()=>{
+    setSort({});
+    setFilter({});
+  }
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
@@ -170,10 +174,11 @@ export default function ProductList() {
 
               <button
                 type="button"
+                onClick={clearFilter}
                 className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
               >
                 <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
+                <XMarkIcon className="h-5 w-5" aria-hidden="true" />
               </button>
               <button
                 type="button"
